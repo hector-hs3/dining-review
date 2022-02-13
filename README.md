@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The following project was created from scratch
+The following project was created from scratch with the objective to construct a RESTful web API with data persistence using Spring and Spring Data JPA
 
 
 ---
