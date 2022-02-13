@@ -1,0 +1,1 @@
+INSERT INTO users(id, name, city, state, zipcode, peanut, egg, dairy) VALUES (1, "hector0791", "Miami", "FL", 33130, false, false, false);
