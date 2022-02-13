@@ -2,9 +2,13 @@ package com.codeacademy.diningreview.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.codeacademy.diningreview.utils.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,4 +43,8 @@ public class Review {
 
   @Column(name = "comment")
   @Getter @Setter private String comment;
+
+  @Column(name = "status")
+  @Enumerated(EnumType.STRING)
+  @Getter @Setter private Status status;
 }
