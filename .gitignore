@@ -3,4 +3,4 @@
 .settings/
 .vscode
 target/
-db/
+data/
