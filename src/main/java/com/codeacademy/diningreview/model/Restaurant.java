@@ -15,27 +15,28 @@ import javax.persistence.Id;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter @Setter 
 @Entity
 @Table(name = "restaurants")
 public class Restaurant {
 
   @Id
   @GeneratedValue
-  @Getter @Setter private Long id;
+  private Long id;
 
   @Column(name = "name")
-  @Getter @Setter private String name;
+  private String name;
 
   @Column(name = "overall")
-  @Getter @Setter private Long overall;
+  private Long overall;
 
   @Column(name = "peanut")
-  @Getter @Setter private Long peanut;
+  private Long peanut;
 
   @Column(name = "egg")
-  @Getter @Setter private Long egg;
+  private Long egg;
 
   @Column(name = "dairy")
-  @Getter @Setter private Long dairy;
+  private Long dairy;
   
 }

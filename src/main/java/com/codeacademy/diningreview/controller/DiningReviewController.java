@@ -8,10 +8,7 @@ import com.codeacademy.diningreview.repository.ReviewRepository;
 import com.codeacademy.diningreview.repository.UserRepository;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -31,8 +28,12 @@ public class DiningReviewController {
     this.restaurantRepo = restaurantRepository;
   }
 
+  // @PostMapping("/user")
+  // public User createUserProfile(@RequestBody User user) {
+
+  // }
+
   @GetMapping("/user/{userName}")
-  @ResponseBody
   public User getUserProfile(@PathVariable("userName") String userName) {
     Optional<User> userOptional = userRepo.findByName(userName);
 

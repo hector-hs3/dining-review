@@ -13,33 +13,34 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter @Setter 
 @Entity
 @Table(name = "users")
 public class User {
 
   @Id
   @GeneratedValue
-  @Getter @Setter private Long id;
+  private Long id;
 
   @Column(name = "name")
-  @Getter @Setter private String name;
+  private String name;
   
   @Column(name = "city")
-  @Getter @Setter private String city;
+  private String city;
 
   @Column(name = "state")
-  @Getter @Setter private String state;
+  private String state;
 
   @Column(name = "zipcode")
-  @Getter @Setter private String zipcode;
+  private String zipcode;
 
   @Column(name = "peanut")
-  @Getter @Setter private boolean peanut;
+  private boolean peanut;
 
   @Column(name = "egg")
-  @Getter @Setter private boolean egg;
+  private boolean egg;
 
   @Column(name = "dairy")
-  @Getter @Setter private boolean dairy;
+  private boolean dairy;
   
 }

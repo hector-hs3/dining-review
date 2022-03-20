@@ -1,16 +1,22 @@
 package com.codeacademy.diningreview.model;
 
+import com.codeacademy.diningreview.utils.Status;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 public class AdminReview {
   
-  @Getter @Setter
-  private boolean accept;
-  
-  // @Getter @Setter
-  // private Review pendingReview;
+  private Review pendingReview;
+
+  public AdminReview(Review pendingReview) {
+    this.pendingReview = pendingReview;
+  }
+
+  public void updateStatus(boolean accept) {
+    Status status = accept ? Status.ACCEPTED : Status.REJECTED;
+    this.pendingReview.setStatus(status);
+  }
 
 }
