@@ -2,10 +2,6 @@ package com.codeacademy.diningreview.model;
 
 import com.codeacademy.diningreview.utils.Status;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 public class AdminReview {
   
   private Review pendingReview;
