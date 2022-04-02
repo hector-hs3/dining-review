@@ -35,7 +35,7 @@ public class User {
   private String state;
 
   @Column(name = "zipcode")
-  private String zipcode;
+  private Long zipcode;
 
   @Column(name = "peanut")
   private boolean peanut;

@@ -10,7 +10,7 @@ public class AdminReview {
     this.pendingReview = pendingReview;
   }
 
-  public void updateStatus(boolean accept) {
+  public void acceptStatus(boolean accept) {
     Status status = accept ? Status.ACCEPTED : Status.REJECTED;
     this.pendingReview.setStatus(status);
   }

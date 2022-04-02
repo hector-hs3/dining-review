@@ -27,6 +27,12 @@ public class Restaurant {
 
   @Column(name = "name")
   private String name;
+  
+  @Column(name = "zipcode")
+  private Long zipcode;
+
+  @Column(name = "reviews")
+  private Long reviews;
 
   @Column(name = "overall")
   private Long overall;
