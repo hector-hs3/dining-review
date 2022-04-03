@@ -1,7 +1,9 @@
 package com.codeacademy.diningreview.controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import javax.validation.Valid;
 
@@ -145,8 +147,48 @@ public class DiningReviewController {
 
     AdminReview adminReview = new AdminReview(pendingReview);
     adminReview.acceptStatus(accept);
-    return reviewRepo.save(adminReview.getReview());
+    Review updatedReview = reviewRepo.save(adminReview.getReview());
+
+    calculateRatings(updatedReview.getRestaurantId());
+
+    return updatedReview;
   }
+
+
+  public void calculateRatings(Long restaurantId) {
+    Optional<Restaurant> rOptional = restaurantRepo.findById(restaurantId);
+    if (!rOptional.isPresent()) {
+      String msg = "Invalid restaurant Id when calculating Ratings";
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, msg);
+    }
+
+    List<Review> reviews = reviewRepo.findByRestaurantIdAndStatus(restaurantId, Status.ACCEPTED);
+
+    if (!reviews.isEmpty()) {
+      DecimalFormat df = new DecimalFormat("0.00");
+      
+      Double totalReviews = (double) reviews.size();
+      Integer sumOfPeanut = reviews.stream().map(x -> x.getPeanut().intValue()).reduce(0, Integer::sum);
+      Integer sumOfEgg = reviews.stream().map(x -> x.getEgg().intValue()).reduce(0, Integer::sum);
+      Integer sumOfDairy = reviews.stream().map(x -> x.getDairy().intValue()).reduce(0, Integer::sum);
+      
+      double avgPeanut = (double) sumOfPeanut / totalReviews.doubleValue();
+      double avgEgg = (double) sumOfEgg / totalReviews.doubleValue();
+      double avgDairy = (double) sumOfDairy / totalReviews.doubleValue();
+      double overall = ((double) avgPeanut + avgEgg + avgDairy) / 3.0;
+
+      Restaurant restaurant = rOptional.get();
+      restaurant.setReviews(Long.valueOf(reviews.size()));
+      restaurant.setOverall(df.format(overall));
+      restaurant.setPeanut(df.format(avgPeanut));
+      restaurant.setEgg(df.format(avgEgg));
+      restaurant.setDairy(df.format(avgDairy));
+
+      restaurantRepo.save(restaurant);
+    }
+    
+  }
+
 
   @PostMapping("/restaurants")
   @ResponseStatus(code = HttpStatus.CREATED)
@@ -157,7 +199,7 @@ public class DiningReviewController {
       String msg = "Restaurant " +rBody.getName() + " already exists in " + rBody.getZipcode();
       throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, msg);
     }
-    Restaurant restaurant = new Restaurant(null, rBody.getName(), rBody.getZipcode(), null, null, null, null, null);
+    Restaurant restaurant = new Restaurant(null, rBody.getName(), rBody.getZipcode(), Long.valueOf(0), null, null, null, null);
     return restaurantRepo.save(restaurant);
   }  
 
@@ -171,5 +213,15 @@ public class DiningReviewController {
     }
 
     return rOptional.get();
+  }
+
+  @GetMapping("/restaurants/zipcode/{zip}")
+  public List<Restaurant> getZipcodeRestaurants(@PathVariable String zip) {
+    if (!Pattern.matches("[0-9]{5}", zip)) {
+      String msg = "Invalid zipcode: " + zip;
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msg);
+    }
+
+    return restaurantRepo.findByZipcodeAndReviewsGreaterThanOrderByOverallDesc(Long.parseLong(zip), Long.valueOf(1));
   }
 }

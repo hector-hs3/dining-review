@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,15 +43,15 @@ public class Restaurant {
   private Long reviews;
 
   @Column(name = "overall")
-  private Long overall;
+  private String overall;
 
   @Column(name = "peanut")
-  private Long peanut;
+  private String peanut;
 
   @Column(name = "egg")
-  private Long egg;
+  private String egg;
 
   @Column(name = "dairy")
-  private Long dairy;
+  private String dairy;
   
 }
