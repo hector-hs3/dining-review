@@ -147,5 +147,18 @@ public class DiningReviewController {
     adminReview.acceptStatus(accept);
     return reviewRepo.save(adminReview.getReview());
   }
+
+  @PostMapping("/restaurants")
+  @ResponseStatus(code = HttpStatus.CREATED)
+  public Restaurant createRestaurant(@Valid @RequestBody Restaurant rBody) {
+    List<Restaurant> matches = restaurantRepo.findByNameAndZipcode(rBody.getName(), rBody.getZipcode());
+    
+    if (!matches.isEmpty()) {
+      String msg = "Restaurant " +rBody.getName() + " already exists in " + rBody.getZipcode();
+      throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, msg);
+    }
+    Restaurant restaurant = new Restaurant(null, rBody.getName(), rBody.getZipcode(), null, null, null, null, null);
+    return restaurantRepo.save(restaurant);
+  }  
   
 }
