@@ -1,9 +1,11 @@
 package com.codeacademy.diningreview.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.codeacademy.diningreview.model.AdminReview;
 import com.codeacademy.diningreview.model.Restaurant;
 import com.codeacademy.diningreview.model.Review;
 import com.codeacademy.diningreview.model.User;
@@ -119,4 +121,31 @@ public class DiningReviewController {
     reviewBody.setStatus(Status.PENDING);
     return reviewRepo.save(reviewBody);
   }
+
+  @GetMapping("/admin/reviews")
+  public List<Review> getPendingReviews() {
+    return reviewRepo.findByStatus(Status.PENDING);
+  }
+  
+  @GetMapping("/admin/reviews/{reviewId}")
+  @ResponseStatus(code = HttpStatus.ACCEPTED)
+  public Review acceptReview(@PathVariable("reviewId") String rId, @RequestParam Boolean accept) {
+    
+    Optional<Review> rOptional = reviewRepo.findById(Long.parseLong(rId));
+    if (!rOptional.isPresent()) {
+      String msg = "Given review ID does not exist: " + rId;
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, msg);
+    }
+
+    Review pendingReview = rOptional.get();
+    if (!pendingReview.getStatus().equals(Status.PENDING)) {
+      String msg = "Review no longer pending: " + pendingReview.getStatus();
+      throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, msg);
+    }
+
+    AdminReview adminReview = new AdminReview(pendingReview);
+    adminReview.acceptStatus(accept);
+    return reviewRepo.save(adminReview.getReview());
+  }
+  
 }
