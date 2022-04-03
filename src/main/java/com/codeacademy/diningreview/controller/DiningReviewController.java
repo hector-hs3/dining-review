@@ -160,5 +160,16 @@ public class DiningReviewController {
     Restaurant restaurant = new Restaurant(null, rBody.getName(), rBody.getZipcode(), null, null, null, null, null);
     return restaurantRepo.save(restaurant);
   }  
-  
+
+  @GetMapping("/restaurants/{restaurantId}")
+  public Restaurant getRestaurant(@PathVariable("restaurantId") String rId) {
+    Optional<Restaurant> rOptional = restaurantRepo.findById(Long.parseLong(rId));
+
+    if (!rOptional.isPresent()) {
+      String msg = "Restaurant with id " + rId + " does not exit";
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, msg);
+    }
+
+    return rOptional.get();
+  }
 }
