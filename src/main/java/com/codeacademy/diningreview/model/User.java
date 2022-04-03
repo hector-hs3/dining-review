@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class User {
   private String state;
 
   @Column(name = "zipcode")
+  @Digits(integer = 5, fraction = 0)
   private Long zipcode;
 
   @Column(name = "peanut")

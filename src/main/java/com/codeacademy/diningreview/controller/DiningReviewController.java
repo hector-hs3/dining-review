@@ -4,10 +4,13 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.codeacademy.diningreview.model.Restaurant;
+import com.codeacademy.diningreview.model.Review;
 import com.codeacademy.diningreview.model.User;
 import com.codeacademy.diningreview.repository.RestaurantRepository;
 import com.codeacademy.diningreview.repository.ReviewRepository;
 import com.codeacademy.diningreview.repository.UserRepository;
+import com.codeacademy.diningreview.utils.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,4 +93,30 @@ public class DiningReviewController {
     userRepo.save(userBody);    
   } 
 
+  @PostMapping("/user/{userName}/review")
+  @ResponseStatus(code = HttpStatus.CREATED)
+  public Review createReview(
+    @PathVariable("userName") String userName,
+    @Valid @RequestBody Review reviewBody) {
+
+    Optional<User> uOptional = userRepo.findByName(userName);
+    if (!uOptional.isPresent()) {
+      String msg = "User does not exist: " + userName;
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, msg);
+    }
+
+    Optional<Restaurant> rOptional = restaurantRepo.findById(reviewBody.getRestaurantId());
+    if (!rOptional.isPresent()) {
+      String msg = "Restaurant ID does not exist: " + reviewBody.getRestaurantId(); 
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, msg);
+    }
+
+
+    if (!userName.equals(reviewBody.getUser())) {
+      reviewBody.setUser(userName);
+    }
+
+    reviewBody.setStatus(Status.PENDING);
+    return reviewRepo.save(reviewBody);
+  }
 }

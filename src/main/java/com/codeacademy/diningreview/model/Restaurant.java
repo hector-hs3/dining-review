@@ -2,6 +2,7 @@ package com.codeacademy.diningreview.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class Restaurant {
   private String name;
   
   @Column(name = "zipcode")
+  @Digits(integer = 5, fraction = 0)
   private Long zipcode;
 
   @Column(name = "reviews")
